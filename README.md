@@ -1,4 +1,5 @@
 ## X-cloneCoding
+efub-intern ToyProject 1팀
 
 ## 팀원
 | [김남우](https://github.com/corjqnrl) | [민서](https://github.com/m2nsp) |
@@ -12,3 +13,7 @@
 
 ## DB ERD
 https://www.erdcloud.com/d/WgcGEbjupKqxXT2dv
+
+
+## API 명세
+https://m2nsp.gitbook.io/m2nsp/x-clone
