@@ -8,3 +8,7 @@
 
 ## 기간
 2025.05.14 ~ 2025.06.02
+
+
+## DB ERD
+https://www.erdcloud.com/d/WgcGEbjupKqxXT2dv
