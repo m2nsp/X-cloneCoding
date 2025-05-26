@@ -1,0 +1,23 @@
+# 배포 환경 전용 설정
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update     # 운영 DB는 수정 안 하도록
+    show-sql: false      # 로그에 쿼리 미반영
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true   # 초기화 할 경우에만
+
+  sql:
+    init:
+      mode: never      # 처음 한 번만 always -> never
+
+server:
+  port: 8080
