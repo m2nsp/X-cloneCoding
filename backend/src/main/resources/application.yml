@@ -1,0 +1,7 @@
+# 공통 설정
+spring:
+  profiles:
+    active: prod
+
+    # 개발 환경 : dev
+    # 배포 환경 : prod
