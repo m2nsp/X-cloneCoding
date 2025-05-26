@@ -31,7 +31,7 @@ jobs:
         working-directory: ./backend
         run: |
           chmod +x ./gradlew
-          ./gradlew build
+          ./gradlew clean build
 
       # 4. Docker Hub 로그인 (secrets에 등록된 계정으로)
       - name: Log in to Docker Hub
@@ -70,6 +70,7 @@ jobs:
             docker run -d --name xclone \
               -p 8080:8080 \
               --restart=always \
+              -e SPRING_PROFILES_ACTIVE=prod \
               ${{ secrets.DOCKER_USERNAME }}/xclone:latest
-            # 새 컨테이너 실행 -> # 포트 매핑 (EC2 8080 → 컨테이너 8080) -> # 서버 재시작 시 자동 실행 -> # 최신 이미지로 실행
+            # 새 컨테이너 실행 -> # 포트 매핑 (EC2 8080 → 컨테이너 8080) -> # 서버 재시작 시 자동 실행 -> #prod프로파일로 설정 -> # 최신 이미지로 실행
             # 줄바꿈할 때 \ 뒤에 공백이 있으면 안 됨!
