@@ -33,19 +33,23 @@ jobs:
           chmod +x ./gradlew
           ./gradlew clean build
 
-      # 4. Docker Hub 로그인 (secrets에 등록된 계정으로)
+      # 4. 설정 파일 포함여부 체크
+      - name: Check application-prod.yml in JAR
+        run: jar tf build/libs/*.jar | grep application-prod.yml
+
+      # 5. Docker Hub 로그인 (secrets에 등록된 계정으로)
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # 5. Docker 이미지 빌드 및 푸시
-      - name: Build and Push Docker image
+      # 6. Docker 이미지 빌드 및 푸시
+      - name: Build Docker image
         working-directory: ./backend
         run: |
           pwd   #로그 출력용
-          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/xclone:latest .  # 이미지 빌드
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/xclone:latest .  # 이미지 빌드
           docker push ${{ secrets.DOCKER_USERNAME }}/xclone:latest       # Docker Hub에 업로드
 
       # 6. EC2에 SSH 접속 후 배포 수행
