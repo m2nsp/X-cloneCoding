@@ -61,13 +61,13 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/xclone:latest     # 최신 이미지 받기
 
             echo "🛑 Stopping existing container..."
-            docker stop ${{ secrets.DOCKER_USERNAME }}/xclone || true                                   # 기존 컨테이너 중지 (없어도 에러 무시)
+            docker stop xclone || true                                   # 기존 컨테이너 중지 (없어도 에러 무시)
 
             echo "🧹 Removing old container..."
-            docker rm ${{ secrets.DOCKER_USERNAME }}/xclone || true                                     # 기존 컨테이너 삭제 (없어도 에러 무시)
+            docker rm xclone || true                                     # 기존 컨테이너 삭제 (없어도 에러 무시)
 
             echo "🚀 Starting new container..."
-            docker run -d --name ${{ secrets.DOCKER_USERNAME }}/xclone \
+            docker run -d --name xclone \
               -p 8080:8080 \
               --restart=always \
               ${{ secrets.DOCKER_USERNAME }}/xclone:latest
