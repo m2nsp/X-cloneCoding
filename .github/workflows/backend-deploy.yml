@@ -26,13 +26,16 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
-      # 3. gradlew 실행 권한 부여
-      - name: Grant execute permission to gradlew
-        run: chmod +x ./gradlew
-
-      # 4. Gradle로 프로젝트 빌드 (jar 생성)
+      # 3. Gradle로 프로젝트 빌드 (jar 생성)
       - name: Build with Gradle
-        run: ./gradlew build
+        working-directory: ./backend
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build
+
+      # 4. 설정 파일 포함여부 체크
+      - name: Check application-prod.yml in JAR
+        run: jar tf build/libs/*.jar | grep application-prod.yml
 
       # 5. Docker Hub 로그인 (secrets에 등록된 계정으로)
       - name: Log in to Docker Hub
@@ -42,12 +45,14 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # 6. Docker 이미지 빌드 및 푸시
-      - name: Build and Push Docker image
+      - name: Build Docker image
+        working-directory: ./backend
         run: |
+          pwd   #로그 출력용
           docker build -t ${{ secrets.DOCKER_USERNAME }}/xclone:latest .  # 이미지 빌드
           docker push ${{ secrets.DOCKER_USERNAME }}/xclone:latest       # Docker Hub에 업로드
 
-      # 7. EC2에 SSH 접속 후 배포 수행
+      # 6. EC2에 SSH 접속 후 배포 수행
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -67,7 +72,10 @@ jobs:
             docker rm xclone || true                                     # 기존 컨테이너 삭제 (없어도 에러 무시)
 
             echo "🚀 Starting new container..."
-            docker run -d --name xclone \                                # 새 컨테이너 실행
-              -p 80:8080 \                                               # 포트 매핑 (EC2 80 → 컨테이너 8080)
-              --restart=always \                                         # 서버 재시작 시 자동 실행
-              ${{ secrets.DOCKER_USERNAME }}/xclone:latest              # 최신 이미지로 실행
+            docker run -d --name xclone \
+              -p 8080:8080 \
+              --restart=always \
+              -e SPRING_PROFILES_ACTIVE=prod \
+              ${{ secrets.DOCKER_USERNAME }}/xclone:latest
+            # 새 컨테이너 실행 -> # 포트 매핑 (EC2 8080 → 컨테이너 8080) -> # 서버 재시작 시 자동 실행 -> #prod프로파일로 설정 -> # 최신 이미지로 실행
+            # 줄바꿈할 때 \ 뒤에 공백이 있으면 안 됨!
