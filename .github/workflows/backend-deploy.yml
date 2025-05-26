@@ -44,7 +44,8 @@ jobs:
       - name: Build and Push Docker image
         working-directory: ./backend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/xclone:latest .  # 이미지 빌드
+          pwd   #로그 출력용
+          docker build --no-cache -t ${{ secrets.DOCKER_USERNAME }}/xclone:latest .  # 이미지 빌드
           docker push ${{ secrets.DOCKER_USERNAME }}/xclone:latest       # Docker Hub에 업로드
 
       # 6. EC2에 SSH 접속 후 배포 수행
