@@ -61,13 +61,15 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/xclone:latest     # 최신 이미지 받기
 
             echo "🛑 Stopping existing container..."
-            docker stop xclone || true                                   # 기존 컨테이너 중지 (없어도 에러 무시)
+            docker stop ${{ secrets.DOCKER_USERNAME }}/xclone || true                                   # 기존 컨테이너 중지 (없어도 에러 무시)
 
             echo "🧹 Removing old container..."
-            docker rm xclone || true                                     # 기존 컨테이너 삭제 (없어도 에러 무시)
+            docker rm ${{ secrets.DOCKER_USERNAME }}/xclone || true                                     # 기존 컨테이너 삭제 (없어도 에러 무시)
 
             echo "🚀 Starting new container..."
-            docker run -d --name xclone \                                # 새 컨테이너 실행
-              -p 80:8080 \                                               # 포트 매핑 (EC2 80 → 컨테이너 8080)
-              --restart=always \                                         # 서버 재시작 시 자동 실행
-              ${{ secrets.DOCKER_USERNAME }}/xclone:latest              # 최신 이미지로 실행
+            docker run -d --name ${{ secrets.DOCKER_USERNAME }}/xclone \
+              -p 8080:8080 \
+              --restart=always \
+              ${{ secrets.DOCKER_USERNAME }}/xclone:latest
+            # 새 컨테이너 실행 -> # 포트 매핑 (EC2 8080 → 컨테이너 8080) -> # 서버 재시작 시 자동 실행 -> # 최신 이미지로 실행
+            # 줄바꿈할 때 \ 뒤에 공백이 있으면 안 됨!
