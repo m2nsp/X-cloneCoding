@@ -34,6 +34,9 @@ public class User extends BaseEntity {
     @Column
     private String description; //자기소개
 
+    @Column
+    private String profileImg;  //프로필 이미지 주소
+
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tweet> tweet;        //작성한 트윗
 }

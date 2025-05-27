@@ -17,7 +17,7 @@ spring:
 
   sql:
     init:
-      mode: never      # 처음 한 번만 always -> never
+      mode: always      # 처음 한 번만 always -> never
 
 server:
   port: 8080
