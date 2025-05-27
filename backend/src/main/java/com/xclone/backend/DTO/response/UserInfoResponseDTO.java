@@ -12,6 +12,7 @@ public class UserInfoResponseDTO {
     private String userId;
     private String userName;
     private String description;
+    private String profileImg;
     private LocalDateTime createdDate;
 
     public static UserInfoResponseDTO from (User user) {
@@ -19,6 +20,7 @@ public class UserInfoResponseDTO {
                 user.getUserId(),
                 user.getName(),
                 user.getDescription(),
+                user.getProfileImg(),
                 user.getCreatedDate()
         );
     }
