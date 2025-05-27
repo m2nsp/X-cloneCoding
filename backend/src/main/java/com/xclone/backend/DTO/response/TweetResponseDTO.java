@@ -14,6 +14,7 @@ public class TweetResponseDTO {
     private Long tweetId;
     private String writerId;
     private String writerName;
+    private String writerProfileImg;
     private String content;
     private Integer likeCnt;
     private Integer commentCnt;
@@ -28,6 +29,7 @@ public class TweetResponseDTO {
                 tweet.getTweetId(),
                 tweet.getWriter().getUserId(),
                 tweet.getWriter().getName(),
+                tweet.getWriter().getProfileImg(),
                 tweet.getContent(),
                 tweet.getTweetLikeCnt(),        //tweet.getLikes().size()
                 tweet.getTweetCommentCnt(),
