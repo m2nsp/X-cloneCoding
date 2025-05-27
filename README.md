@@ -19,4 +19,4 @@ https://www.erdcloud.com/d/WgcGEbjupKqxXT2dv
 https://m2nsp.gitbook.io/m2nsp/x-clone
 
 ## swagger
-https://xclone.kro.kr:8080/swagger-ui/index.html
+http://xclone.kro.kr:8080/swagger-ui/index.html
