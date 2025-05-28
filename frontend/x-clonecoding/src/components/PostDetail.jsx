@@ -1,11 +1,13 @@
 // 게시글 상세 보기
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { FaRegComment, FaRetweet, FaRegHeart, FaRegBookmark } from 'react-icons/fa';
 import { FiShare } from 'react-icons/fi';
+import axiosInstance from "../libs/axiosInstance";
 
 const PostDetailContainer = styled.div`
   display: flex;
@@ -168,13 +170,16 @@ const ReplyButton = styled.button`
 `;
 
 function PostDetail () {
-  const [text, setText] = useState("");
+  const { tweetId } = useParams();
+  const [tweet, setTweet] = useState(null);
 
-    const inputRef = useRef(null);
+  useEffect(() => {
+    axios.get(`/tweets/${tweetId}`)
+      .then(res => setTweet(res.data))
+      .catch(err => console.error(err));
+  }, [tweetId]);
 
-    const handleChange = (e) => {
-      StyleSheetContext(e.target.value);
-  };
+  if (!tweet) return <div style={{color: "white"}}>Loading...</div>;
 
   return (
     <>
@@ -188,14 +193,14 @@ function PostDetail () {
         
         <PostDetailItem>
           <PostDetailUser>
-            <DetailProfileImg src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhcgcglPpLjsInn8x8i8nojmxkIqkSWTJwg&s" alt="프로필 사진" />
+            <DetailProfileImg src={tweet.profileImgUrl} alt="프로필 사진" />
             <UserNameId>
-              <PostDetailWriterName>짱구</PostDetailWriterName>
-              <PostDetailId>@crayonshinzzang</PostDetailId>
+              <PostDetailWriterName>{tweet.writerName}</PostDetailWriterName>
+              <PostDetailId>{tweet.writerId}</PostDetailId>
             </UserNameId>
           </PostDetailUser>
           <PostDetailContent>
-            예시 글입니다.
+            {tweet.content}
           </PostDetailContent>
           <TranslateButton>Translate post</TranslateButton>
           <FunctionButtons>
@@ -210,14 +215,25 @@ function PostDetail () {
         <CommentSection>
           <CommentUserImg src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhcgcglPpLjsInn8x8i8nojmxkIqkSWTJwg&s" alt="comment프로필" />
           <Input
-            ref={inputRef}
-            onChange={handleChange}
-            value={text}
             placeholder="Post your reply"
           />
           <ReplyButton>Reply</ReplyButton>
         </CommentSection>
-      
+
+        {tweet.comments && tweet.comments.length > 0 && tweet.comments.map((comment, idx) => (
+          <PostDetailItem key={idx}>
+            <PostDetailUser>
+              <DetailProfileImg src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhcgcglPpLjsInn8x8i8nojmxkIqkSWTJwg&s" alt="댓글 프로필" />
+              <UserNameId>
+                <PostDetailWriterName>{comment.commentorName}</PostDetailWriterName>
+                <PostDetailId>{comment.commentorId}</PostDetailId>
+              </UserNameId>
+            </PostDetailUser>
+            <PostDetailContent>
+              {comment.content}
+            </PostDetailContent>
+          </PostDetailItem>
+        ))}
       </PostDetailContainer>
     </>
   );
