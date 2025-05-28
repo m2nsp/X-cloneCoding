@@ -7,6 +7,7 @@ import { FaRegImage, FaSmile, FaCamera, FaPollH, FaPlusCircle } from 'react-icon
 import { BsFiletypeGif } from 'react-icons/bs';
 import { GoLocation } from 'react-icons/go';
 import { IoMdGlobe } from 'react-icons/io';
+import axiosInstance from "../libs/axiosInstance";
 
 const Wrapper = styled.div`
   border-bottom: 1px solid #222;
@@ -89,12 +90,34 @@ const PostButton = styled.button`
 
 
 function Post () {
+  const [formData, setFormData] = useState({
+    writerId: "fubi",
+    content: "",
+  });
+
   const [text, setText] = useState("");
 
   const inputRef = useRef(null);
 
   const handleChange = (e) => {
-    StyleSheetContext(e.target.value);
+    setText(e.target.value);  // 입력창 상태 업데이트
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handlePost = async (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
+    try {
+      await axiosInstance.post("/tweets/post", formData);
+      setText("");  // 입력창 초기화
+      setFormData((prev) => ({...prev, content: ""}));  // formData 초기화
+      // window.location.reload();  
+    } catch (err) {
+      alert('게시 실패');
+    }
   };
 
 
@@ -124,7 +147,7 @@ function Post () {
               <IoMdGlobe size={17} />
               <FaPlusCircle size={17} />
             </FunctionButtonRow>
-            <PostButton>Post</PostButton>
+            <PostButton onClick={handlePost}>Post</PostButton>
           </PublicPostBtn>
         </ButtonContainer>
       </Wrapper>
