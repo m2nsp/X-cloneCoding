@@ -1,10 +1,11 @@
 // 전체 게시글 페이지에 들어가는 게시글
 
 import React, { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Delete from './Delete.jsx';
-import { FaRegComment, FaRetweet, FaRegHeart, FaRegBookmark } from 'react-icons/fa';
+import { FaRegComment, FaRegHeart } from 'react-icons/fa';
 import { FiShare } from 'react-icons/fi';
 
 
@@ -88,10 +89,10 @@ const FunctionButtons = styled.div`
   justify-content: space-around;
 `;
 
-function PostListItem () {
+function PostListItem ({ post }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const openModal = () => {
+  const openModal = (id, authorId) => {
     setShowDeleteModal(true);
   };
 
@@ -103,33 +104,31 @@ function PostListItem () {
     <>
       <PostItem>
         <PostItemInfo>
-          <ItemProfileImg src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhcgcglPpLjsInn8x8i8nojmxkIqkSWTJwg&s" alt="프로필 사진" />
+          {/* 명세에서 프사 있는 걸로 수정해야 될 듯 */}
+          <ItemProfileImg src={post.authorProfileImg} alt="프로필 사진" />
           <ContentContainer>
             <Top>
               <PostUserNameId>
-                <PostWriterName>짱구</PostWriterName>
-                <PostWriterId>@crayonshinzzang</PostWriterId>
-              </PostUserNameId>
+                <PostWriterName>{post.authorNickName}</PostWriterName>
+                <PostWriterId>{post.authorId}</PostWriterId>
+              </PostUserNameId> 
               <DeleteButton onClick={openModal}>···</DeleteButton>
             </Top>
-            <StyleLink to="/post/:id">
+            <StyleLink to={`/post/${post.id}`}>
               <PostContent>
-                예시 글입니다.
+                {post.content}
               </PostContent>
             </StyleLink>
           </ContentContainer>
         </PostItemInfo>
         <FunctionButtons>
-            <FaRegComment size={15} />
-            <FaRetweet size={15} />
-            <FaRegHeart size={15} />
-            <FaRegBookmark size={15} />
-            <FiShare size={15} />
+            <FaRegComment size={15} /> {post.commentCnt}
+            <FaRegHeart size={15} /> {post.likeCnt}
+            <ElapsedTime>{post.elapsedTime}</ElapsedTime>
         </FunctionButtons>
       </PostItem>
-
       {/* 모달 조건부 렌더링 */}
-      {showDeleteModal && <Delete onCancel={closeModal} />}
+      {showDeleteModal && <Delete postId={post.id} userId={post.authorId} onCancel={closeModal} />}
     </>
   );
 }

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import PostListItem from './PostListItem';
+import axiosInstance from "../libs/axiosInstance";
 
 const ProfileContainer = styled.div`
   display: flex;
@@ -155,20 +156,36 @@ const ButtonChoicePost = styled.p`
 `;
 
 function Profile () {
+  const [profileInfo, setProfileInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const { data } = await axiosInstance.get('/users/fubi');
+        setProfileInfo(data);
+      } catch (err) {
+        alert("사용자의 정보를 가져올 수 없습니다");
+      }
+    };
+    fetchProfile();
+  }, [userId]);
+
+  if (!profileInfo) return null;  // 데이터 로딩 전
+
   return (
     <>
     <ProfileContainer>
       <ProfileHeader>
         <HomeLink to="/"><AiOutlineArrowLeft size={24} /></HomeLink>
-        <ProfileName>짱구</ProfileName>
+        <ProfileName>{profileInfo.userName}</ProfileName>
       </ProfileHeader>
       <ProfileImgContainer>
-        <ProfileBigImg src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhcgcglPpLjsInn8x8i8nojmxkIqkSWTJwg&s" alt="프로필 사진" />
+        <ProfileBigImg src={profileInfo.profileImg} alt="프로필 사진" />
         <EditButton>Edit profile</EditButton>
       </ProfileImgContainer>
       <ProfileInfo>
-        <Name>짱구</Name>
-        <Id>@crayonshinzzang</Id>
+        <Name>{profileInfo.userName}</Name>
+        <Id>{profileInfo.userId}</Id>
         <SignInDate><FaRegCalendarAlt size={12}/> Joined January 2024</SignInDate>
         <FollowFollowing>
           <Follow><b>0</b> Following</Follow>
