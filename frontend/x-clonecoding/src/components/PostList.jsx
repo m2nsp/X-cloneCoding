@@ -1,14 +1,40 @@
 // 전체 게시글 보여주는 페이지
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PostListItem from './PostListItem';
+import axiosInstance from '../libs/axiosInstance';
 
 
 function PostList () {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {       // Home 게시글 불러오기
+    axiosInstance.get('/home')
+    .then(res => {
+      console.log(res.data); // 여기가 배열이어야 함
+      setPosts(res.data);
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error(err);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <div style={{ color:"white", textAlign:"center", marginTop:"40px"}}>Loading...</div>;
+  }
+
+  if (posts.length === 0) {
+    return <div style={{ color: "white", textAlign: "center", marginTop: "40px" }}>게시글이 없습니다.</div>;
+  }
+
   return(
     <>
-    <PostListItem />
-    <PostListItem />
+      {posts.map(post => (
+        <PostListItem key={post.tweetId} post={post} />
+      ))}
     </>
   );
 }

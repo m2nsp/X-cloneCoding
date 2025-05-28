@@ -3,6 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import axiosInstance from "../libs/axiosInstance";
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -69,7 +70,22 @@ const CancelButton = styled.button`
   cursor: pointer;
 `;
 
-function Delete ({ onCancel }) {
+function Delete ({ postId, userId, onCancel }) {
+  const handleDelete = async () => {
+    try {
+      await axiosInstance.delete('/tweets/delete', {
+        data: {
+          tweetId: postId,
+          userId: userId,
+        },
+      });
+      onCancel();  // 모달 닫기
+      window.location.reload();  // 삭제 후 새로고침 또는 상태 갱신
+    } catch (err) {
+      alert('삭제 실패');
+    }
+  };
+
   return (
     <>
     <ModalOverlay>
@@ -77,7 +93,7 @@ function Delete ({ onCancel }) {
         <DeleteQText>Delete post?</DeleteQText>
         <DeleteGuideText>This can't be undone and is will be removed from youre profile, the timeline of any accounts that follow you, and from search results</DeleteGuideText>
         <ButtonSection>
-          <DeleteButton>Delete</DeleteButton>
+          <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
           <CancelButton onClick={onCancel}>Cancel</CancelButton>
         </ButtonSection>
       </DeleteModalContainer>
