@@ -1,6 +1,6 @@
 // 프로필
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FaRegCalendarAlt } from 'react-icons/fa';
@@ -157,18 +157,34 @@ const ButtonChoicePost = styled.p`
 
 function Profile () {
   const [profileInfo, setProfileInfo] = useState(null);
+  const [userPosts, setUserPosts] = useState([]);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const { data } = await axiosInstance.get('/users/fubi');
+        const { data } = await axiosInstance.get('/users/user1');
         setProfileInfo(data);
       } catch (err) {
         alert("사용자의 정보를 가져올 수 없습니다");
       }
     };
     fetchProfile();
-  }, [userId]);
+  }, []);
+
+  useEffect(() => {
+    // 전체 게시글 중 authorId가 user1인 것만 필터링
+    const fetchPosts = async () => {
+      try {
+        const { data } = await axiosInstance.get('/home');
+        const filtered = data.tweets.filter(post => post.authorId === 'user1');
+        setUserPosts(filtered);
+      } catch (err) {
+        console.error('게시글이 없습니다', err);
+        setUserPosts([]);
+      }
+    };
+    fetchPosts();
+  }, []);
 
   if (!profileInfo) return null;  // 데이터 로딩 전
 
@@ -185,7 +201,7 @@ function Profile () {
       </ProfileImgContainer>
       <ProfileInfo>
         <Name>{profileInfo.userName}</Name>
-        <Id>{profileInfo.userId}</Id>
+        <Id>@{profileInfo.userId}</Id>
         <SignInDate><FaRegCalendarAlt size={12}/> Joined January 2024</SignInDate>
         <FollowFollowing>
           <Follow><b>0</b> Following</Follow>
@@ -200,9 +216,12 @@ function Profile () {
         <ButtonChoice>Media</ButtonChoice>
         <ButtonChoice>Likes</ButtonChoice>
       </ButtonRow>
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
+      {userPosts.length === 0 ? (
+        <div style={{ color: "white", textAlign: "center", marginTop: "40px"}}>게시글이 없습니다</div>)
+          : (userPosts.map(post => (
+            <PostListItem key={post.id} post={post} />
+        ))
+      )}
     </ProfileContainer>
     </>
   );

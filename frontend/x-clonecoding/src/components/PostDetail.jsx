@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { FaRegComment, FaRetweet, FaRegHeart, FaRegBookmark } from 'react-icons/fa';
@@ -173,11 +172,15 @@ function PostDetail () {
   const { tweetId } = useParams();
   const [tweet, setTweet] = useState(null);
 
+  // 선택한 게시글의 상세 정보 불러오기
   useEffect(() => {
-    axios.get(`/tweets/${tweetId}`)
-      .then(res => setTweet(res.data))
+    axiosInstance.get(`/tweets/${tweetId}`)
+      .then(res => {
+        console.log('상세 응답:', res.data);
+        setTweet(res.data)})
       .catch(err => console.error(err));
   }, [tweetId]);
+
 
   if (!tweet) return <div style={{color: "white"}}>Loading...</div>;
 
@@ -193,10 +196,10 @@ function PostDetail () {
         
         <PostDetailItem>
           <PostDetailUser>
-            <DetailProfileImg src={tweet.profileImgUrl} alt="프로필 사진" />
+            <DetailProfileImg src={tweet.writerProfileImg} alt="프로필 사진" />
             <UserNameId>
               <PostDetailWriterName>{tweet.writerName}</PostDetailWriterName>
-              <PostDetailId>{tweet.writerId}</PostDetailId>
+              <PostDetailId>@{tweet.writerId}</PostDetailId>
             </UserNameId>
           </PostDetailUser>
           <PostDetailContent>

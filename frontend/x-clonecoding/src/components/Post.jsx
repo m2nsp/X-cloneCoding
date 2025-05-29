@@ -2,7 +2,6 @@
 
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { FaRegImage, FaSmile, FaCamera, FaPollH, FaPlusCircle } from 'react-icons/fa';
 import { BsFiletypeGif } from 'react-icons/bs';
 import { GoLocation } from 'react-icons/go';
@@ -91,7 +90,7 @@ const PostButton = styled.button`
 
 function Post () {
   const [formData, setFormData] = useState({
-    writerId: "fubi",
+    writerId: "user1",
     content: "",
   });
 
@@ -107,6 +106,7 @@ function Post () {
     }));
   };
 
+  // 게시글 작성 핸들러
   const handlePost = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
@@ -128,6 +128,7 @@ function Post () {
           <ProfileImage src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhcgcglPpLjsInn8x8i8nojmxkIqkSWTJwg&s" alt="프로필"/>  {/* 프로필 이미지 */}
           <Input
             ref={inputRef}
+            name="content"
             onChange={handleChange}
             value={text}
             placeholder="What is happening?"

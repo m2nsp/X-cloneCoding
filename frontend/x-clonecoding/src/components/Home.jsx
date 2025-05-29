@@ -1,8 +1,7 @@
 // 메인 홈 페이지
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Navigation from './Navigation';
 import PostList from './PostList';
 import Post from './Post';
 
