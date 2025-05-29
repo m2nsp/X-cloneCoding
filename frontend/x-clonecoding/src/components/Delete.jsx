@@ -1,8 +1,6 @@
 // 게시글 삭제
-
 import React from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import axiosInstance from "../libs/axiosInstance";
 
 const ModalOverlay = styled.div`

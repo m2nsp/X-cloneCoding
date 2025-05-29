@@ -2,12 +2,13 @@
 // button이랑 프로필 떨어뜨려야됨
 // button 누르면 각 페이지로 이동
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FaXTwitter, FaCircleUser } from "react-icons/fa6";
 import { FiHome, FiBookmark, FiBell, FiMail, FiMoreHorizontal } from 'react-icons/fi';
 import { BsStars, BsPeople } from 'react-icons/bs';
+import axiosInstance from '../libs/axiosInstance';
 
 // 내비게이션 바
 
@@ -109,6 +110,17 @@ const ProfileTextId = styled.p`
 `;
 
 function Navigation () {
+  const [profile, setProfile] = useState(null);
+  //const location = useLocation();
+
+  useEffect(() => {
+    axiosInstance.get('/users/user1')
+      .then(res => setProfile(res.data))
+      .catch(err => {
+        console.error('프로필 정보를 불러올 수 없습니다.', err);
+      });
+  }, []);
+
   return (
     <>
       <NavigationContainer>
@@ -142,13 +154,15 @@ function Navigation () {
           </NavItem>
         </NavigationContents>
         <PostButton>Post</PostButton>
+        {profile && (
         <ProfileSection to="/profile">
-          <ProfileImg src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDhcgcglPpLjsInn8x8i8nojmxkIqkSWTJwg&s" alt="프로필 사진" />
+          <ProfileImg src={profile.profileImg} alt="프로필 사진" />
           <ProfileInfo>
-            <ProfileTextName>짱구</ProfileTextName>
-            <ProfileTextId>@crayonshinzzang</ProfileTextId>
+            <ProfileTextName>{profile.userName}</ProfileTextName>
+            <ProfileTextId>@{profile.userId}</ProfileTextId>
           </ProfileInfo>
         </ProfileSection>
+      )}
       </NavigationContainer>
     </>
   );

@@ -1,12 +1,10 @@
 // 전체 게시글 페이지에 들어가는 게시글
 
 import React, { useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Delete from './Delete.jsx';
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
-import { FiShare } from 'react-icons/fi';
 
 
 
@@ -45,6 +43,7 @@ const Top = styled.div`
 
 const PostUserNameId = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 8px;
 `;
@@ -80,19 +79,36 @@ const StyleLink = styled(Link)`
 const PostContent = styled.p`
   font-size: 16px;
   color: white;
-  margin: 6px 0 0 0;
+  margin: 0;
 `;
 
 const FunctionButtons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  align-items: center;
+  gap: 32px;
+  margin-top: 0;
+`;
+
+const FunctionButtonItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #aaa;
+  font-size: 15px;
+`;
+
+const ElapsedTime = styled.div`
+  font-size: 13px;
+  color: #aaa;
+  margin-left: 10px;
 `;
 
 function PostListItem ({ post }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const openModal = (id, authorId) => {
+  const openModal = () => {
     setShowDeleteModal(true);
   };
 
@@ -104,13 +120,12 @@ function PostListItem ({ post }) {
     <>
       <PostItem>
         <PostItemInfo>
-          {/* 명세에서 프사 있는 걸로 수정해야 될 듯 */}
           <ItemProfileImg src={post.authorProfileImg} alt="프로필 사진" />
           <ContentContainer>
             <Top>
               <PostUserNameId>
-                <PostWriterName>{post.authorNickName}</PostWriterName>
-                <PostWriterId>{post.authorId}</PostWriterId>
+                <PostWriterName>{post.authorNickname}</PostWriterName>
+                <PostWriterId>@{post.authorId}</PostWriterId>
               </PostUserNameId> 
               <DeleteButton onClick={openModal}>···</DeleteButton>
             </Top>
@@ -122,9 +137,15 @@ function PostListItem ({ post }) {
           </ContentContainer>
         </PostItemInfo>
         <FunctionButtons>
+          <FunctionButtonItem>
             <FaRegComment size={15} /> {post.commentCnt}
+          </FunctionButtonItem>
+          <FunctionButtonItem>
             <FaRegHeart size={15} /> {post.likeCnt}
+          </FunctionButtonItem>
+          <FunctionButtonItem>
             <ElapsedTime>{post.elapsedTime}</ElapsedTime>
+          </FunctionButtonItem>
         </FunctionButtons>
       </PostItem>
       {/* 모달 조건부 렌더링 */}
