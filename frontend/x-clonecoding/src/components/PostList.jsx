@@ -1,6 +1,5 @@
 // 전체 게시글 보여주는 페이지
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import PostListItem from './PostListItem';
 import axiosInstance from '../libs/axiosInstance';
 

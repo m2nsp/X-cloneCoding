@@ -1,12 +1,10 @@
 // 전체 게시글 페이지에 들어가는 게시글
 
 import React, { useState } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Delete from './Delete.jsx';
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
-import { FiShare } from 'react-icons/fi';
 
 
 
@@ -122,7 +120,6 @@ function PostListItem ({ post }) {
     <>
       <PostItem>
         <PostItemInfo>
-          {/* 명세에서 프사 있는 걸로 수정해야 될 듯 */}
           <ItemProfileImg src={post.authorProfileImg} alt="프로필 사진" />
           <ContentContainer>
             <Top>

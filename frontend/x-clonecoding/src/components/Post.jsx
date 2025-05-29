@@ -2,7 +2,6 @@
 
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { FaRegImage, FaSmile, FaCamera, FaPollH, FaPlusCircle } from 'react-icons/fa';
 import { BsFiletypeGif } from 'react-icons/bs';
 import { GoLocation } from 'react-icons/go';
@@ -107,6 +106,7 @@ function Post () {
     }));
   };
 
+  // 게시글 작성 핸들러
   const handlePost = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;

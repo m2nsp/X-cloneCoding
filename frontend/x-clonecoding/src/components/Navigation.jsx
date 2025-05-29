@@ -2,9 +2,9 @@
 // button이랑 프로필 떨어뜨려야됨
 // button 누르면 각 페이지로 이동
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FaXTwitter, FaCircleUser } from "react-icons/fa6";
 import { FiHome, FiBookmark, FiBell, FiMail, FiMoreHorizontal } from 'react-icons/fi';
 import { BsStars, BsPeople } from 'react-icons/bs';
