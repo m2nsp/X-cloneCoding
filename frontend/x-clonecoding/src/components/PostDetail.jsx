@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { AiOutlineArrowLeft } from 'react-icons/ai';
 import { FaRegComment, FaRetweet, FaRegHeart, FaRegBookmark } from 'react-icons/fa';
@@ -173,6 +172,7 @@ function PostDetail () {
   const { tweetId } = useParams();
   const [tweet, setTweet] = useState(null);
 
+  // 선택한 게시글의 상세 정보 불러오기
   useEffect(() => {
     axiosInstance.get(`/tweets/${tweetId}`)
       .then(res => {
@@ -180,6 +180,7 @@ function PostDetail () {
         setTweet(res.data)})
       .catch(err => console.error(err));
   }, [tweetId]);
+
 
   if (!tweet) return <div style={{color: "white"}}>Loading...</div>;
 
